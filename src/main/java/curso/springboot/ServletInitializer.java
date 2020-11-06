@@ -1,4 +1,4 @@
-package curso.springboot.springboot;
+package curso.springboot;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
