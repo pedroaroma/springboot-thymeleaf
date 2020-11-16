@@ -8,38 +8,51 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	rel="stylesheet">
 <!--Import materialize.css-->
-<link type="text/css" rel="stylesheet" href="/materialize/css/materialize.css" media="screen,projection" />
-<link type="text/css" rel="stylesheet" href="/materialize/css/materialize.min.css" media="screen,projection" />
+<link type="text/css" rel="stylesheet"
+	href="/materialize/css/materialize.css" media="screen,projection" />
+<link type="text/css" rel="stylesheet"
+	href="/materialize/css/materialize.min.css" media="screen,projection" />
 
 </head>
 <body>
 
-    <!--JavaScript at end of body for optimized loading-->
-    <script type="text/javascript" src="/materialize/js/materialize.js"></script>
-    <script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
+	<!--JavaScript at end of body for optimized loading-->
+	<script type="text/javascript" src="/materialize/js/materialize.js"></script>
+	<script type="text/javascript" src="/materialize/js/materialize.min.js"></script>
 
 
 	<h1>Cadastro Pessoa</h1>
 	<form action="salvarpessoa" method="post" th:object="${pessoaobj}">
-		<label>ID</label>
-		<input name="id" th:field="*{id}" readonly="readonly">
-		<label>Nome</label>
-		<input name="nome" th:field="*{nome}"> 
-		<label>Sobrenome</label>
-		<input name="sobrenome" th:field="*{sobrenome}"> 
-		<label>Idade</label>
-		<input name="idade" th:field="*{idade}"> 
-		<input class="waves-effect waves-light btn" type="submit" value="salvar">
+		<label>ID</label> <input name="id" th:field="*{id}"
+			readonly="readonly"> <label>Nome</label> <input name="nome"
+			th:field="*{nome}"> <label>Sobrenome</label> <input
+			name="sobrenome" th:field="*{sobrenome}"> <label>Idade</label>
+		<input name="idade" th:field="*{idade}"> <input
+			class="waves-effect waves-light btn" type="submit" value="salvar">
 	</form>
 
+
 	<a href="/listapessoas">Lista de Pessoas cadastradas</a>
+	
+	<br />
+	
+	<form action="pesquisarpessoa" method="post">
+		<label>Pesquisa por nome:</label>
+		<input name="nomepesquisa">
+		<input class="waves-effect waves-light btn" type="submit" value="Buscar">
+	</form>
 
 	<table>
 		<tr th:each="pessoa : ${pessoas}">
 			<td th:text="${pessoa.id}"></td>
 			<td th:text="${pessoa.nome}"></td>
 			<td th:text="${pessoa.sobrenome}"></td>
-			<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
+			<td th:text="${pessoa.idade}"></td>
+			<td><a
+				th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
+			<td><a
+				th:href="@{/removerpessoa/{idpessoa}(idpessoa=${pessoa.id})}">EXcluir</a></td>
+
 		</tr>
 	</table>
 </body>
