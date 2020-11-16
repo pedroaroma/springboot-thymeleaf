@@ -21,6 +21,7 @@ public class Pessoa implements Serializable {
 
 	private String nome;
 	private String sobrenome;
+	private Integer idade;
 	
 	
 	
@@ -47,6 +48,14 @@ public class Pessoa implements Serializable {
 
 	public void setSobrenome(String sobrenome) {
 		this.sobrenome = sobrenome;
+	}
+	
+	public Integer getIdade() {
+		return idade;
+	}
+	
+	public void setIdade(Integer idade) {
+		this.idade = idade;
 	}
 
 }
