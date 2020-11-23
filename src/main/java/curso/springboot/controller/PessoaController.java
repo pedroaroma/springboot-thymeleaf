@@ -27,6 +27,10 @@ public class PessoaController {
 		ModelAndView modelAndView = new ModelAndView("cadastro/cadastropessoa");
 		// passa um objeto vazio para habilitar uma edição futura
 		modelAndView.addObject("pessoaobj", new Pessoa());
+		
+		Iterable<Pessoa> pessoasit = pessoaRepository.findAll();
+		// lista de pessoas para retorno
+		modelAndView.addObject("pessoas", pessoasit);
 
 		return modelAndView;
 	}
@@ -98,5 +102,6 @@ public class PessoaController {
 		
 		return modelAndView;
 	}
+
 
 }
