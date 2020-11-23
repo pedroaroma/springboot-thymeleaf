@@ -13,13 +13,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import curso.springboot.model.Pessoa;
+import curso.springboot.model.Telefone;
 import curso.springboot.repository.PessoaRepository;
+import curso.springboot.repository.TelefoneRepository;
 
 @Controller
 public class PessoaController {
 
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private TelefoneRepository telefoneRepository;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/cadastropessoa")
 	public ModelAndView inicio() {
@@ -102,6 +107,40 @@ public class PessoaController {
 		
 		return modelAndView;
 	}
+	
+	// Telefones
+	@GetMapping("/telefones/{idpessoa}")
+	public ModelAndView telefones(@PathVariable("idpessoa") Long idpessoa) {
 
+		// carrega a pessoa pelo id
+		Optional<Pessoa> pessoa = pessoaRepository.findById(idpessoa);
+		// prepara o retorno para a mesma tela
+		ModelAndView modelAndView = new ModelAndView("cadastro/telefones");
+		// passa o obj para edição
+		modelAndView.addObject("pessoaobj", pessoa.get());
+		// retorna o obj para a view
+		//retorna a lista de telefones cadastrados do usuario
+		modelAndView.addObject("telefones", telefoneRepository.getTelefones(idpessoa));
+		return modelAndView;
+		
+	}
+	
+	@PostMapping("**/addfonePessoa/{pessoaid}")
+	public ModelAndView addFonePessoa(Telefone telefone, @PathVariable("pessoaid") Long pessoaid) {
+		
+		Pessoa pessoa = pessoaRepository.findById(pessoaid).get();
+		telefone.setPessoa(pessoa);
+		
+		telefoneRepository.save(telefone);
+		
+		
+		ModelAndView modelAndView = new ModelAndView("cadastro/telefones");
+		modelAndView.addObject("pessoaobj", pessoa);
+		
+		modelAndView.addObject("telefones", telefoneRepository.getTelefones(pessoaid));
+		
+		return modelAndView;
+	}
+	
 
 }
