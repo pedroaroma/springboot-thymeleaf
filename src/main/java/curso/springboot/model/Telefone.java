@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ForeignKey;
 
@@ -15,7 +18,13 @@ public class Telefone {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@NotEmpty(message = "O número não pode ser vazio")
+	@NotNull(message = "o número não pode ser nulo")
+	@NotBlank(message = "Não coloque espaços em branco")
 	private String numero;
+	
+	@NotEmpty(message = "o número não pode ser vazio")
+	@NotNull(message = "O tipo não pode ser nulo")
 	private String tipo;
 
 	@SuppressWarnings("deprecation")

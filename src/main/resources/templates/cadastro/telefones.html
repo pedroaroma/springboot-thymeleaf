@@ -48,6 +48,12 @@
 	
 	<h5>Telefones</h5>
 	
+	<br />
+		<div th:each = "m : ${msg}">
+			<span th:text = "${m}"></span>
+		</div>	
+	<br />
+	
 	<div class="row">
 	
 		<form th:action="@{/addfonePessoa/{pessoaid}(pessoaid=${pessoaobj.id})}" method="post" class="col 12">

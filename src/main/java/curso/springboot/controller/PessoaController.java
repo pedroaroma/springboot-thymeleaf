@@ -48,25 +48,25 @@ public class PessoaController {
 
 	// intercepta QUALQUER coisa que esteja atrás do /salvarpessoa
 	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa")
-	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult) { //anotação @Valid para realizar as validações
+	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult) { // anotação @Valid para realizar as validações
 
-		if (bindingResult.hasErrors()) { //verifica se há erros na hora de validar os campos (regras das anotações no Model Pessoa)
+		if (bindingResult.hasErrors()) { // verifica se há erros na hora de validar os campos (regras das anotações no Model Pessoa)
 
 			ModelAndView modelAndView = new ModelAndView("cadastro/cadastropessoa");
 
 			Iterable<Pessoa> pessoasIt = pessoaRepository.findAll();
 			modelAndView.addObject("pessoas", pessoasIt);
 			modelAndView.addObject("pessoaobj", pessoa);
-			
-			List<String> msg = new ArrayList<String>(); //Prepara o arraylist de string para armazenas as mensagens de erro
-			
-			for (ObjectError objectError : bindingResult.getAllErrors()) { //recupera todas as mensagens de erro das validações
-				
-				msg.add(objectError.getDefaultMessage()); //adiciona a lista as mensagens vindas das anotações
-				
+
+			List<String> msg = new ArrayList<String>(); // Prepara o arraylist de string para armazenas as mensagens de erro
+
+			for (ObjectError objectError : bindingResult.getAllErrors()) { // recupera todas as mensagens de erro das validações
+
+				msg.add(objectError.getDefaultMessage()); // adiciona a lista as mensagens vindas das anotações
+
 			}
-			
-			modelAndView.addObject("msg", msg); //joga a lista de erros para a view
+
+			modelAndView.addObject("msg", msg); // joga a lista de erros para a view
 
 			return modelAndView;
 
@@ -154,20 +154,44 @@ public class PessoaController {
 
 	}
 
+	// RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa")
 	@PostMapping("**/addfonePessoa/{pessoaid}")
-	public ModelAndView addFonePessoa(Telefone telefone, @PathVariable("pessoaid") Long pessoaid) {
-
-		Pessoa pessoa = pessoaRepository.findById(pessoaid).get();
-		telefone.setPessoa(pessoa);
-
-		telefoneRepository.save(telefone);
+	public ModelAndView addFonePessoa(@Valid Telefone telefone, BindingResult bindingResult, @PathVariable("pessoaid") Long pessoaid) {
 
 		ModelAndView modelAndView = new ModelAndView("cadastro/telefones");
-		modelAndView.addObject("pessoaobj", pessoa);
+		Pessoa pessoa = pessoaRepository.findById(pessoaid).get();
+		
+		if (bindingResult.hasErrors()) {
 
-		modelAndView.addObject("telefones", telefoneRepository.getTelefones(pessoaid));
 
-		return modelAndView;
+			modelAndView.addObject("pessoaobj", pessoa);
+			modelAndView.addObject("telefones", telefoneRepository.getTelefones(pessoaid));
+
+			List<String> msg = new ArrayList<String>();
+
+			for (ObjectError objectError : bindingResult.getAllErrors()) {
+
+				msg.add(objectError.getDefaultMessage());
+
+			}
+
+			modelAndView.addObject("msg", msg);
+
+			return modelAndView;
+
+		} else {
+
+			telefone.setPessoa(pessoa);
+
+			telefoneRepository.save(telefone);
+
+			modelAndView.addObject("pessoaobj", pessoa);
+
+			modelAndView.addObject("telefones", telefoneRepository.getTelefones(pessoaid));
+
+			return modelAndView;
+		}
+
 	}
 
 	@GetMapping("/removertelefone/{idtelefone}")
