@@ -1,6 +1,7 @@
 package curso.springboot.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,6 +10,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Pessoa implements Serializable {
@@ -22,8 +28,17 @@ public class Pessoa implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@NotEmpty(message = "Nome não pode ser Nulo")
+	@NotNull(message = "Nome não pode ser Vazio")
 	private String nome;
+	
+	@NotEmpty(message = "Sobrenome não pode ser vazio")
+	@NotNull(message = "Sobrenome não pode ser nulo")
 	private String sobrenome;
+	
+	@NotNull(message = "idade não pode ser nula")
+	@Min(value = 1, message = "Idade inválida")
+	@Max(value = 100, message = "Idade inválida")
 	private Integer idade;
 	
 	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL)
