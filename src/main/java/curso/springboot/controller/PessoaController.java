@@ -40,6 +40,7 @@ public class PessoaController {
 		modelAndView.addObject("pessoaobj", new Pessoa());
 
 		Iterable<Pessoa> pessoasit = pessoaRepository.findAll();
+		//Iterable<Pessoa> pessoasit = pessoaRepository.findAllAsc(); utilizar para exibir as pessoas cadastradas em ordem crescente pelo id
 		// lista de pessoas para retorno
 		modelAndView.addObject("pessoas", pessoasit);
 
@@ -50,6 +51,8 @@ public class PessoaController {
 	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa")
 	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult) { // anotação @Valid para realizar as validações
 
+		pessoa.setTelefones(telefoneRepository.getTelefones(pessoa.getId()));
+		
 		if (bindingResult.hasErrors()) { // verifica se há erros na hora de validar os campos (regras das anotações no Model Pessoa)
 
 			ModelAndView modelAndView = new ModelAndView("cadastro/cadastropessoa");
