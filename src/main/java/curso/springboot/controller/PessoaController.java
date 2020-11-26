@@ -85,6 +85,8 @@ public class PessoaController {
 			modelAndView.addObject("pessoas", pessoasit);
 			// passa um objeto vazio para habilitar uma edição futura
 			modelAndView.addObject("pessoaobj", new Pessoa());
+			
+			modelAndView.addObject("msg", "Sucesso!");
 
 			return modelAndView;
 		}
