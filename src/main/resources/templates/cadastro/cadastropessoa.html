@@ -213,19 +213,38 @@
 
 	<!-- a href="/listapessoas">Lista de Pessoas cadastradas</a -->
 
-
-	<div class="row">
-		<form action="pesquisarpessoa" method="post" class="col s12">
-			<div class="row">
-				<div class="input-field col s12">
-					<label for="nomepesquisa" class="active">Pesquisa por nome:</label>
-					<input name="nomepesquisa" id="nomepesquisa" class="validate">
-					<input class="waves-effect waves-light btn" type="submit" value="Buscar">
-				</div>	
-			</div>
-		</form>
-	</div>	
-
+	<fieldset>
+		<legend>Campo de Pesquisa</legend>
+		
+		<div class="row">
+			<form action="pesquisarpessoa" method="post" class="col s12">
+				<div class="row">
+				
+					<div class="input-field col s6">
+						<label for="nomepesquisa" class="active">Pesquisa por nome:</label>
+						<input name="nomepesquisa" id="nomepesquisa" class="validate">
+					</div>
+					
+					<div class="input-field col s6">
+						<label for="pesquisasexo" class="active">Pesquisa por sexo:</label>
+						<select class="browser-default" name="pesquisasexo" id="pesquisasexo">
+							<option value="" selected>Todos</option>
+							<option value="MASCULINO" th:text="Masculino" />
+							<option value="FEMININO" th:text="Feminino" />
+					</select>
+					</div>
+				
+				</div>
+				
+				<div class="row">
+					<div class="col s6">
+						<input class="waves-effect waves-light btn" type="submit" value="Buscar">
+					</div>
+				</div>
+			</form>
+		</div>	
+	</fieldset>
+	
 	<table class="striped">
 		<thead>
 			<tr>

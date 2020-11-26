@@ -19,4 +19,7 @@ public interface PessoaRepository extends CrudRepository<Pessoa, Long> {
 	//Metodo teste para ordenar o cadastro
 	@Query("FROM Pessoa p ORDER BY p.id ASC")
 	List<Pessoa> findAllAsc();
+	
+	@Query("SELECT p FROM Pessoa p WHERE p.nome LIKE %?1% AND p.sexopessoa = ?2")
+	List<Pessoa> findPessoaByNameAndSex(String nome, String sexopessoa);
 }
