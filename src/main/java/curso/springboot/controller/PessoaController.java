@@ -1,5 +1,6 @@
 package curso.springboot.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import curso.springboot.model.Pessoa;
+import curso.springboot.model.Profissao;
 import curso.springboot.model.Telefone;
 import curso.springboot.repository.PessoaRepository;
+import curso.springboot.repository.ProfissaoRepository;
 import curso.springboot.repository.TelefoneRepository;
 import curso.springboot.service.ReportUtil;
 
@@ -37,6 +41,9 @@ public class PessoaController {
 	
 	@Autowired
 	private ReportUtil reportUtil;
+	
+	@Autowired
+	private ProfissaoRepository profissaoRepository;
 
 
 	@RequestMapping(method = RequestMethod.GET, value = "/cadastropessoa")
@@ -50,13 +57,15 @@ public class PessoaController {
 		//Iterable<Pessoa> pessoasit = pessoaRepository.findAllAsc(); utilizar para exibir as pessoas cadastradas em ordem crescente pelo id
 		// lista de pessoas para retorno
 		modelAndView.addObject("pessoas", pessoasit);
+		
+		modelAndView.addObject("profissoes", profissaoRepository.findAll());
 
 		return modelAndView;
 	}
 
 	// intercepta QUALQUER coisa que esteja atrás do /salvarpessoa
-	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa")
-	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult) { // anotação @Valid para realizar as validações
+	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa", consumes = {"multipart/form-data"})
+	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult bindingResult, final MultipartFile file) throws IOException { // anotação @Valid para realizar as validações
 
 		pessoa.setTelefones(telefoneRepository.getTelefones(pessoa.getId()));
 		
@@ -75,12 +84,32 @@ public class PessoaController {
 				msg.add(objectError.getDefaultMessage()); // adiciona a lista as mensagens vindas das anotações
 
 			}
+			
+			
+			modelAndView.addObject("profissoes", profissaoRepository.findAll());
 
 			modelAndView.addObject("msg", msg); // joga a lista de erros para a view
 
 			return modelAndView;
 
 		} else {
+			
+			if(file.getSize() > 0) { //cadastra um novo curriculo
+				
+				pessoa.setCurriculo(file.getBytes());
+				pessoa.setTipoFileCurriculo(file.getContentType());
+				pessoa.setNomeFileCurriculo(file.getOriginalFilename());
+				
+			}else {
+				if(pessoa.getId() != null && pessoa.getId() > 0) { //editando
+					
+					Pessoa pessoaTemp = pessoaRepository.findById(pessoa.getId()).get();
+					pessoa.setCurriculo(pessoaTemp.getCurriculo());
+					pessoa.setTipoFileCurriculo(pessoaTemp.getTipoFileCurriculo());
+					pessoa.setNomeFileCurriculo(pessoaTemp.getNomeFileCurriculo());
+					
+				}
+			}
 
 			// salva a pessoa
 			pessoaRepository.save(pessoa);
@@ -124,6 +153,12 @@ public class PessoaController {
 		// passa o obj para edição
 		modelAndView.addObject("pessoaobj", pessoa.get());
 		// retorna o obj para a view
+		
+		Iterable<Pessoa> pessoasit = pessoaRepository.findAll();
+		modelAndView.addObject("pessoas", pessoasit);
+		
+		modelAndView.addObject("profissoes", profissaoRepository.findAll());
+		
 		return modelAndView;
 	}
 

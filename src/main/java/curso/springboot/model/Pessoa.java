@@ -1,18 +1,27 @@
 package curso.springboot.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Pessoa implements Serializable {
@@ -38,11 +47,14 @@ public class Pessoa implements Serializable {
 	@Min(value = 1, message = "Idade inválida")
 	@Max(value = 100, message = "Idade inválida")
 	private Integer idade;
-	
+
 	private String sexopessoa;
 
 	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL)
 	private List<Telefone> telefones;
+
+	@Enumerated(EnumType.STRING)
+	private Cargo cargo;
 
 	private String cep;
 
@@ -55,6 +67,20 @@ public class Pessoa implements Serializable {
 	private String uf;
 
 	private String numero;
+
+	@ManyToOne
+	private Profissao profissao;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@Temporal(TemporalType.DATE)
+	private Date dataNascimento;
+
+	@Lob
+	private byte[] curriculo;
+
+	private String nomeFileCurriculo;
+
+	private String tipoFileCurriculo;
 
 	public Long getId() {
 		return id;
@@ -143,13 +169,61 @@ public class Pessoa implements Serializable {
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
-	
+
 	public String getSexopessoa() {
 		return sexopessoa;
 	}
-	
+
 	public void setSexopessoa(String sexopessoa) {
 		this.sexopessoa = sexopessoa;
+	}
+
+	public void setProfissao(Profissao profissao) {
+		this.profissao = profissao;
+	}
+
+	public Profissao getProfissao() {
+		return profissao;
+	}
+
+	public Cargo getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(Cargo cargo) {
+		this.cargo = cargo;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setCurriculo(byte[] curriculo) {
+		this.curriculo = curriculo;
+	}
+
+	public byte[] getCurriculo() {
+		return curriculo;
+	}
+
+	public String getNomeFileCurriculo() {
+		return nomeFileCurriculo;
+	}
+
+	public void setNomeFileCurriculo(String nomeFileCurriculo) {
+		this.nomeFileCurriculo = nomeFileCurriculo;
+	}
+
+	public String getTipoFileCurriculo() {
+		return tipoFileCurriculo;
+	}
+
+	public void setTipoFileCurriculo(String tipoFileCurriculo) {
+		this.tipoFileCurriculo = tipoFileCurriculo;
 	}
 
 }

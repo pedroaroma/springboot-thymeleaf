@@ -21,12 +21,21 @@
 <!-- Adicionando JQuery -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+
+<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
 
 <!-- Adicionando Javascript -->
     <script>
 
         $(document).ready(function() {
-
+        		
+				$('#dataNascimento').datepicker({
+					showOthermonths:true,
+					format: 'yyyy-MM-dd',
+				})
+				
             function limpa_formulário_cep() {
                 // Limpa valores do formulário de cep.
                 $("#rua").val("");
@@ -119,7 +128,7 @@
 	</div>	
 	<br />
 	
-		<form action="salvarpessoa" method="post" th:object="${pessoaobj}" class="col s12" id="formpessoa">
+		<form action="salvarpessoa" method="post" th:object="${pessoaobj}" class="col s12" id="formpessoa" enctype="multipart/form-data">
 		
 			<div class="row">
 				<div class="input-field col s6">
@@ -149,18 +158,41 @@
 					<input name="idade" th:field="*{idade}" id="idade" placeholder="Informe a idade">
 				</div>
 				
-				<!-- Combo Box -->		
+				<!-- Combo Box fixo no html -->		
+				<div class="row">
 				
-				<div class="input-field col s6">
-					<label for="sexopessoa" class="active">Sexo</label>
-					<select class="browser-default" th:field="*{sexopessoa}">
-						<option value="NAO DEFINIDO" selected>--[Selecione]--</option>
-						<option value="MASCULINO" th:text="Masculino" />
-						<option value="FEMININO" th:text="Feminino" />
-					</select>
-				</div>
+					<div class="input-field col s3">
+						<label for="sexopessoa" class="active">Sexo</label>
+						<select class="browser-default" th:field="*{sexopessoa}">
+							<option value="NAO DEFINIDO" selected>--[Selecione]--</option>
+							<option value="MASCULINO" th:text="Masculino" />
+							<option value="FEMININO" th:text="Feminino" />
+						</select>
+					</div>
+					
+					<!-- Combo puxando do BD -->
+					<div class="input-field col s3">
+						<label for="profissao" class="active">Profissão</label>
+						<select class="browser-default" th:field="*{profissao}" id="profissao">
+							<option th:each="p : ${profissoes}" th:value="${p.id}" th:text=${p.nome}>
+						</select>
+					</div>
+					
+					<!-- COMBO POR ENUMS -->
+					<div class="input-field col s3">
+						<label for="cargo" class="active">Cargo</label>
+						<select class="browser-default" th:field="*{cargo}" id="cargo">
+							<option th:each="c : ${T(curso.springboot.model.Cargo).values()}" th:value="${c}" th:text=${c}>
+						</select>
+					</div>
+					
+					<div class="input-field col s3">
+						<label for="DataNascimento" class="active">Data de Nascimento:</label>
+						<input type="date" id="dataNascimento" th:field="*{dataNascimento}" name="dataNascimento" placeholder="dd-mm-yyyy" onclick="event.preventDefault()" >
+					</div>	
+					
+				</div>				
 								
-
 				<div class="input-field col s6">
 					<label for="cep" class="active">CEP</label>
 					<input name="cep" th:field="*{cep}" id="cep" placeholder="Informe o CEP">
@@ -189,9 +221,15 @@
 				<div class="input-field col s6">
 					<label for="numero" class="active">Número</label>
 					<input name="numero" th:field="*{numero}" id="numero" placeholder="Informe o número">
-				</div>				
-								
+				</div>									
 				
+			</div>
+			
+			<div class="row">
+				<div class="input-field col s12">
+					<label for="file" class="active">Currículo:</label>
+					<input type="file" id="file" name="file" class="file-field input-field">
+				</div>
 			</div>
 			
 			
