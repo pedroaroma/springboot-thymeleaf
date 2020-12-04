@@ -293,7 +293,7 @@
 				<th>ID</th>
 				<th>Nome</th>
 				<th>Sobrenome</th>
-				<th>Idade</th>
+				<th>Curriculo</th>
 				<th>Editar</th>
 				<th>Excluir</th>
 			</tr>
@@ -307,7 +307,10 @@
 			
 			<td th:text="${pessoa.sobrenome}"></td>
 			
-			<td th:text="${pessoa.idade}"></td>
+			<td>
+			<a th:if="${pessoa.curriculo != null}" th:href="@{/baixarcurriculo/{idpessoa}(idpessoa=${pessoa.id})}">Download</a>
+			<label th:if="${pessoa.curriculo == null}" style="color: red;">Sem arquivos</label>
+			</td>
 			
 			<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
 			<td><a th:href="@{/removerpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Excluir</a></td>

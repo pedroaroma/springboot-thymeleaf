@@ -324,5 +324,33 @@ public class PessoaController {
 
 		return modelAndView;
 	}
+	
+	@GetMapping("**/baixarcurriculo/{idpessoa}")
+	public void baixarcurriculo(@PathVariable("idpessoa") Long idpessoa, HttpServletResponse response) throws IOException {
+		
+		/*Consultar o objeto pessoa no banco de dados*/
+		
+		Pessoa pessoa = pessoaRepository.findById(idpessoa).get();
+		
+		if (pessoa.getCurriculo() != null) {
+			
+			/*Setar o tamanho de resposta*/
+			response.setContentLength(pessoa.getCurriculo().length);
+			
+			/*Tipo do arquivo para download*/
+			/*para contenttype generico utilizar application/octet-stream*/
+			response.setContentType(pessoa.getTipoFileCurriculo());
+			
+			/*Define o cabeçalho da resposta*/
+			String headerKey = "Content-Disposition";
+			String headerValue = String.format("attachament; filename=\"%s\"", pessoa.getNomeFileCurriculo());
+			response.setHeader(headerKey, headerValue);
+			
+			/*Finaliza a resposta passando o arquivo*/
+			
+			response.getOutputStream().write(pessoa.getCurriculo());
+			
+		}
+	}
 
 }
