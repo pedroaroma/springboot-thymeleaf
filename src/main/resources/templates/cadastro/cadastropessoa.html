@@ -110,6 +110,20 @@
 		color: white;
 	}
 	
+	table {
+		width: 100%;
+	}
+	
+	table td, table th {
+		border: 1px solid grey;
+	}
+	
+	table th {
+		background: #eee;
+	}
+	
+	
+	
 </style>
 
 <title>Cadastro de Pessoas</title>
@@ -260,7 +274,7 @@
 				
 					<div class="input-field col s6">
 						<label for="nomepesquisa" class="active">Pesquisa por nome:</label>
-						<input name="nomepesquisa" id="nomepesquisa" class="validate">
+						<input name="nomepesquisa" id="nomepesquisa" class="validate" th:value="${nomepesquisa}">
 					</div>
 					
 					<div class="input-field col s6">
@@ -299,7 +313,7 @@
 			</tr>
 		</thead>
 		
-		<tr th:each="pessoa : ${pessoas}">
+		<tr th:each="pessoa : ${pessoas.content}">
 		
 			<td th:text="${pessoa.id}"></td>
 			
@@ -317,5 +331,26 @@
 		</tr>
 		
 	</table>
+	
+	<div class="row" style="margin-top: 30px;">
+	
+
+	<center>
+		
+		<span th:if="${pessoas.hasPrevious()}">
+			<a th:href="@{/pessoaspag(page=${pessoas.number-1}, size=${pessoas.size}, nomepesquisa=${nomepesquisa})}">Anterior</a>
+		</span>
+		
+		<th:block th:each="i: ${#numbers.sequence(0, pessoas.totalPages - 1)}">
+			<a th:href="@{/pessoaspag(page=${i}, size=${pessoas.size}, nomepesquisa=${nomepesquisa})}">[[ ${i} + 1 ]]</a>
+		</th:block>
+		
+		<span th:if="${pessoas.hasNext()}">
+			<a th:href="@{/pessoaspag(page=${pessoas.number+1}, size=${pessoas.size}, nomepesquisa=${nomepesquisa})}">Proximo</a>
+		</span>
+		
+	</center>
+	
+	</div>
 </body>
 </html>
